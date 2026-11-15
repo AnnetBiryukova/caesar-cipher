@@ -1,25 +1,46 @@
 package com.javarush.caesar.core;
-
 import com.javarush.caesar.exception.CipherException;
+import java.util.List;
 
 public class Cipher {
 
-    private final char[] alphabet;
+    private final List<Character> characterList;
 
-    public Cipher(char[] alphabet) {
-        this.alphabet = alphabet;
+    public Cipher(List<Character> characterList) {
+        this.characterList = characterList;
     }
 
+
     public String encrypt(String text, int shift) {
-        // TODO сдвинуть каждый символ алфавита на shift позиций вперед по кругу
-        //  символ, которого нет в алфавите, пропускаем
-        //  позицию символа ищем быстрее, чем перебором всего массива
-        throw new UnsupportedOperationException("Метод encrypt пока не написан");
+        StringBuilder result = new StringBuilder();
+        int size = characterList.size();
+        String lower = text.toLowerCase();
+        for (int i = 0; i < lower.length(); i++) {
+            char originalSymbol = lower.charAt(i);
+            if (!characterList.contains(originalSymbol)) {
+                result.append(originalSymbol);
+                continue;
+            }
+            int indexOfOriginalSymbol = characterList.indexOf(originalSymbol);
+            int newIndex = (indexOfOriginalSymbol + shift) % size;
+            result.append(characterList.get(newIndex));
+        }
+        return result.toString();
     }
 
     public String decrypt(String encryptedText, int shift) throws CipherException {
-        // TODO сдвинуть каждый символ на shift позиций назад по кругу
-        //  символ, которого нет в алфавите, - ошибка: бросаем CipherException
-        throw new UnsupportedOperationException("Метод decrypt пока не написан");
+        StringBuilder result = new StringBuilder();
+        int size = characterList.size();
+        String lower = encryptedText.toLowerCase();
+        for (int i = 0; i < lower.length(); i++) {
+            char encryptedSymbol = lower.charAt(i);
+            if (!characterList.contains(encryptedSymbol)) {
+                throw new CipherException("Символа " + encryptedSymbol + " нет в алфавите. Невозможно расшифровать текст.");
+            }
+            int indexOfEncryptedSymbol = characterList.indexOf(encryptedSymbol);
+            int newIndex = (indexOfEncryptedSymbol - shift + size) % size;
+            result.append(characterList.get(newIndex));
+        }
+        return result.toString();
     }
 }
