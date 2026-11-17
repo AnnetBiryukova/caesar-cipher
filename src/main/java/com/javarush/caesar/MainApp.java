@@ -1,9 +1,11 @@
 package com.javarush.caesar;
+
 import com.javarush.caesar.core.BruteForce;
 import com.javarush.caesar.core.Cipher;
 import com.javarush.caesar.exception.CipherException;
 import com.javarush.caesar.service.FileManager;
 import com.javarush.caesar.service.Validator;
+
 import java.util.*;
 
 public class MainApp {
@@ -93,18 +95,18 @@ public class MainApp {
     }
 
     private void encryptFile() throws CipherException {
-        String sourceText = fileManager.readFile(askForSourceFile());
+        String sourcePath = askForSourceFile();
         int key = askForKey();
         String resultFile = askForResultFile();
-        fileManager.writeFile(cipher.encrypt(sourceText, key), resultFile);
+        fileManager.encryptFile(sourcePath, resultFile, cipher, key);
         System.out.println("Файл зашифрован и сохранён: " + resultFile);
     }
 
     private void decryptFile() throws CipherException {
-        String sourceText = fileManager.readFile(askForSourceFile());
+        String sourcePath = askForSourceFile();
         int key = askForKey();
         String resultFile = askForResultFile();
-        fileManager.writeFile(cipher.decrypt(sourceText, key), resultFile);
+        fileManager.decryptFile(sourcePath, resultFile, cipher, key);
         System.out.println("Файл расшифрован и сохранён: " + resultFile);
     }
 
